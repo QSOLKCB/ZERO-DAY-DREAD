@@ -73,8 +73,8 @@
     const code = requestedCode === "AUTO" ? CODES[(basis >>> 8) % CODES.length] : requestedCode;
     const data = CATALOG[language], human = language === "Human Operator";
     // Preserve the iconic DREAD-9999 family, but bind each record ID to
-    // language, normalized seed, round and resolved diagnostic code.
-    const inputs = [language, seed, String(round), code];
+    // requested language mode, resolved language, normalized seed, round and code.
+    const inputs = [requestedLanguage, language, seed, String(round), code];
     const identity = inputs.map((value) => value.length + ":" + value).join("|");
     const fingerprint = (hash(identity).toString(16).padStart(8, "0") +
       hash("dread-v2|" + identity).toString(16).padStart(8, "0")).toUpperCase();
@@ -82,7 +82,7 @@
     return Object.freeze({
       id,
       classification: "FICTIONAL SATIRE — NOT A REAL SECURITY ADVISORY",
-      language, code, code_expansion: DIAGNOSTICS[code][0],
+      language, requested_language: requestedLanguage, code, code_expansion: DIAGNOSTICS[code][0],
       related_codes: Object.freeze(human ? CODES.slice() : [code]),
       title: data[0], description: data[1], vector: data[2], impact: data[3],
       mitigation: data[4], diagnostic: DIAGNOSTICS[code][1],
@@ -93,7 +93,7 @@
     });
   }
   function toYAML(advisory) {
-    const keys = ["id", "classification", "language", "code", "code_expansion", "related_codes", "title", "description", "vector", "impact", "mitigation", "diagnostic", "severity", "panic_score", "consultant_revenue", "seed", "round"];
+    const keys = ["id", "classification", "language", "requested_language", "code", "code_expansion", "related_codes", "title", "description", "vector", "impact", "mitigation", "diagnostic", "severity", "panic_score", "consultant_revenue", "seed", "round"];
     const lines = ["# ZERO-DAY-DREAD — FICTIONAL SATIRE — NEVER USE FOR SECURITY DECISIONS", "---"];
     for (const key of keys) {
       const value = advisory[key];

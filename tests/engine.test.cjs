@@ -33,6 +33,7 @@ test("YAML safely quotes user-supplied values", () => {
 test("DREAD-9999 includes all four operator classifications", () => {
   const report = generate({ language: "Human Operator", code: "PEBKAC", seed: "fixture", round: 0 });
   assert.match(report.id, /^DREAD-9999-[0-9A-F]{16}-PEBKAC$/);
+  assert.equal(report.requested_language, "Human Operator");
   assert.equal(report.severity, "UNPATCHABLE");
   assert.deepEqual(report.related_codes, ["PEBKAC", "ID-10-T", "PICNIC", "LAYER-8"]);
 });
@@ -92,4 +93,28 @@ test("CRLF checkout normalizes to the canonical YAML text", () => {
   const windowsCheckout = expected.replace(/\n/g, "\r\n");
   assert.notEqual(windowsCheckout, expected);
   assert.equal(windowsCheckout.replace(/\r\n/g, "\n"), expected);
+});
+
+test("Codex reproduction: ALL and direct language choices never reuse distinct evidence IDs", () => {
+  const fromRoulette = generate({language: "ALL", code: "PEBKAC", seed: "x", round: 0});
+  const explicit = generate({language: fromRoulette.language, code: fromRoulette.code, seed: fromRoulette.seed, round: fromRoulette.round});
+  assert.equal(fromRoulette.requested_language, "ALL");
+  assert.equal(explicit.requested_language, explicit.language);
+  assert.equal(fromRoulette.language, explicit.language);
+  assert.notEqual(fromRoulette.id, explicit.id);
+  assert.notEqual(toYAML(fromRoulette), toYAML(explicit));
+  assert.ok(toYAML(fromRoulette).includes('requested_language: "ALL"'));
+  assert.ok(toYAML(explicit).includes('requested_language: "' + explicit.language + '"'));
+  assert.deepEqual(fromRoulette, generate({language: "ALL", code: "PEBKAC", seed: "x", round: 0}));
+});
+test("requested-language provenance makes distinct roulette versus direct filenames unique", () => {
+  for (const round of [0, 1, 2, 3, 4, 16, 100]) {
+    for (const code of CODES) {
+      const roulette = generate({language: "ALL", code, seed: "stable", round});
+      const direct = generate({language: roulette.language, code, seed: "stable", round});
+      assert.notEqual(roulette.id, direct.id);
+      assert.notEqual(roulette.requested_language, direct.requested_language);
+      assert.equal(roulette.id, generate({language: "ALL", code, seed: "stable", round}).id);
+    }
+  }
 });

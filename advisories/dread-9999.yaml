@@ -1,8 +1,9 @@
 # ZERO-DAY-DREAD — FICTIONAL SATIRE — NEVER USE FOR SECURITY DECISIONS
 ---
-id: "DREAD-9999-9A7E0BB2294FEC0D-PEBKAC"
+id: "DREAD-9999-2E9607C0B681DC5B-PEBKAC"
 classification: "FICTIONAL SATIRE — NOT A REAL SECURITY ADVISORY"
 language: "Human Operator"
+requested_language: "Human Operator"
 code: "PEBKAC"
 code_expansion: "Problem Exists Between Keyboard And Chair"
 related_codes:
