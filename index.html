@@ -33,6 +33,9 @@
         <label for="seed">Reproducibility seed</label>
         <input id="seed" name="seed" type="text" value="2004" maxlength="128" spellcheck="false" autocomplete="off" aria-describedby="seed-help">
         <p id="seed-help" class="small">Same language + diagnostic + seed + round = identical results. No network required.</p>
+        <label for="round">Evidence round (zero-based)</label>
+        <input id="round" name="round" type="number" min="0" max="9007199254740991" step="1" value="0" required aria-describedby="round-help">
+        <p id="round-help" class="small">Enter the round from a YAML packet to replay it. Changing language, diagnostic or seed resets it to 0.</p>
         <button id="run" class="primary" type="button">[ ! ] DISCOVER ANOTHER DISASTER</button>
         <p class="small">Advisory sequence <strong id="round-counter">001</strong>. No real vulnerability checks occur.</p>
         <div class="separator"></div>
@@ -70,6 +73,7 @@
       <p class="small">Reproducible fictional advisory records. YAML 1.2 compatible, no YAML parser or external packages needed.</p>
       <pre id="yaml-preview" tabindex="0" aria-label="Generated fictional YAML advisory"># Enable JavaScript to generate a fictional advisory.</pre>
     </section>
+    <noscript><p class="panel">JavaScript is required to generate advisories. This page is fictional satire. The <a href="advisories/dread-9999.yaml">canonical Human Operator YAML</a> remains available without JavaScript.</p></noscript>
     <section class="closing" aria-label="About this satire"><p><strong>DREAD-9999</strong> — Human Operator Still Required. Severity: UNPATCHABLE. Vendor response: <em>“Works on my machine.”</em></p><p>Not an actual scanner, security product or source of real advisories. Any resemblance to real incidents is the industry's problem.</p></section>
   </main>
   <footer class="shell footer"><span>© QSOL-IMC · ZERO-DAY-DREAD · APACHE-2.0</span><a href="https://github.com/QSOLKCB/ZERO-DAY-DREAD">SOURCE / AUDIT THE NONSENSE</a></footer>

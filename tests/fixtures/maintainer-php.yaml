@@ -1,0 +1,21 @@
+# ZERO-DAY-DREAD — FICTIONAL SATIRE — NEVER USE FOR SECURITY DECISIONS
+---
+id: "DREAD-51C51D5853EF0B77-PEBKAC"
+classification: "FICTIONAL SATIRE — NOT A REAL SECURITY ADVISORY"
+language: "PHP"
+requested_language: "PHP"
+code: "PEBKAC"
+code_expansion: "Problem Exists Between Keyboard And Chair"
+related_codes:
+  - "PEBKAC"
+title: "Runtime Discovers It Is Running PHP"
+description: "An AI auditor discovered a PHP application containing PHP."
+vector: "Legacy CMS Archaeology"
+impact: "The migration committee has been meeting since 2004."
+mitigation: "Replace the codebase with interpretive dance. Document the choreography."
+diagnostic: "The human-machine interface remains a legacy component."
+severity: "EXISTENTIAL"
+panic_score: 94
+consultant_revenue: "$204,000 (imaginary)"
+seed: "2004"
+round: 12
