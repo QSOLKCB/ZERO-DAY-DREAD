@@ -25,6 +25,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
@@ -42,6 +44,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -53,13 +57,17 @@ jobs:
 
   browser:
     name: Offline browser / ${{ matrix.browser }}
-    runs-on: ubuntu-latest
+    # Playwright 1.51.1 has a tested Ubuntu 24.04 dependency profile.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
         browser: [chromium, firefox, webkit]
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
