@@ -57,7 +57,7 @@ jobs:
 
   browser:
     name: Offline browser / ${{ matrix.browser }}
-    # Playwright 1.51.1 has a tested Ubuntu 24.04 dependency profile.
+    # Pin the runner and Playwright; install matching bundled browsers and OS dependencies.
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     strategy:
@@ -73,7 +73,7 @@ jobs:
           node-version: '22'
       - name: Install isolated development-only browser harness
         run: |
-          npm install --prefix "$RUNNER_TEMP/dread-browser" --no-audit --no-fund playwright@1.51.1
+          npm install --prefix "$RUNNER_TEMP/dread-browser" --no-audit --no-fund playwright@1.64.1
           node "$RUNNER_TEMP/dread-browser/node_modules/playwright/cli.js" install --with-deps "${{ matrix.browser }}"
       - name: Exercise offline UI and download contracts
         env:

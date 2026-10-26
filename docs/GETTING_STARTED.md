@@ -28,7 +28,7 @@ Node.js is only needed for tests, not for the website.
 
 Optional development checks (also run in CI): install `ruamel.yaml==0.18.16` in a
 Python virtual environment, then run `python scripts/check-yaml.py`. Install
-`playwright@1.51.1` in a separate temporary npm directory, install its browser binaries,
+`playwright@1.64.1` in a separate temporary npm directory, install its browser binaries,
 and set `NODE_PATH` to that directory's `node_modules` before running
 `node scripts/browser-check.cjs`. `BROWSER` may be chromium, firefox or webkit.
 These test dependencies are never staged into Pages.
