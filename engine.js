@@ -60,7 +60,10 @@
   function yamlScalar(value) {
     if (typeof value === "number" && Number.isFinite(value)) return String(value);
     if (typeof value !== "string") throw new TypeError("Expected a finite number or string scalar");
-    return JSON.stringify(wellFormed(value));
+    // JSON permits raw C1 controls/noncharacters that YAML readers may reject,
+    // and some readers fold NEL. Escape these while preserving the seed value.
+    return JSON.stringify(wellFormed(value)).replace(/[\u007f-\u009f\u2028\u2029\ufeff\ufffe\uffff]/g,
+      (character) => "\\u" + character.charCodeAt(0).toString(16).padStart(4, "0"));
   }
   function generate(options) {
     const o = options || {};

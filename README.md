@@ -1,4 +1,21 @@
-# ZERO-DAY-DREAD
+<a id="zero-day-dread"></a>
+<p align="center">
+  <img src="assets/zero-day-dread.png"
+       alt="ZERO-DAY-DREAD — Industrial cybersecurity warning banner"
+       width="960">
+</p>
+
+<p align="center">
+  <img src="assets/badges/panic.svg" alt="Satire: panic — reproducible">
+  <img src="assets/badges/layer8.svg" alt="Satire: Layer 8 — unpatchable">
+  <img src="assets/badges/coffee.svg" alt="Satire: coffee — required dependency">
+  <img src="assets/badges/consultants.svg" alt="Satire: consultants — billing successfully">
+</p>
+
+*The badges above are satire. The workflow status below is real.*
+
+[![CI](https://github.com/QSOLKCB/ZERO-DAY-DREAD/actions/workflows/pages.yml/badge.svg?branch=main)](https://github.com/QSOLKCB/ZERO-DAY-DREAD/actions/workflows/pages.yml)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-e7b66b)](LICENSE)
 
 **Your code was secure yesterday. Then AI learned to read it.**
 
@@ -50,7 +67,7 @@ All findings are fictional. Unfortunately, some of the programming languages are
 
 ## Try the simulator
 
-Open `index.html` in a browser, or use the GitHub Pages site after the first merge. No build tools, network, accounts, telemetry, or AI API are required.
+Open `index.html` in a browser, or visit [GitHub Pages](https://qsolkcb.github.io/ZERO-DAY-DREAD/). No build tools, network, accounts, telemetry, or AI API are required by the simulator. README status badges are separate network resources.
 
 Choose a programming language (including **YAML**), a diagnostic code (**PEBKAC**, **ID-10-T**, **PICNIC**, **LAYER-8**), and an optional reproducibility seed. Generate fictional advisories, copy their YAML, or download a YAML evidence packet. Select **Human Operator** to trigger the canonical **DREAD-9999** finding, with all four human-error codes.
 
@@ -65,7 +82,7 @@ Automated regression tests: `node --test tests/*.test.cjs`. See [Getting Started
 - YAML 1.2-compatible advisory exports and canonical fixture
 - Node built-in regression tests and GitHub Actions Pages deployment
 
-## Planned Features
+## Simulator Features
 
 ### The AI Panic Engine
 
@@ -105,7 +122,7 @@ Possible metrics include:
 - Probability of Management Understanding the Issue (PMUI)
 - Estimated Consultant Revenue (ECR)
 
-All scores will be explicitly labelled as satire.
+All scores are explicitly labelled as satire.
 
 ### RCE Roulette
 
@@ -173,10 +190,13 @@ All simulated advisories will use project-specific identifiers rather than real 
 - [x] Add absurd remediation assistant
 - [x] Create reproducibility and regression tests
 - [x] Support offline operation
-- [ ] Publish static website through GitHub Pages
+- [x] Publish static website through GitHub Pages
 - [ ] Release v0.1.0
 
-Detailed architecture and experimental specifications will eventually live in `/docs`.
+See [engineering contracts](docs/CONTRACTS.md), [release checklist](docs/RELEASE_CHECKLIST.md),
+and the [prospective research registration](docs/research/registration-v1.md).
+The title artwork is the original generated PNG, displayed at width 960 with automatic
+height; no stretched or resampled copy is used.
 
 ## Historical Context
 

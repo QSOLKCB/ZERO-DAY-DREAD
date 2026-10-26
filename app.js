@@ -4,6 +4,7 @@
   const engine = globalThis.DreadEngine;
   const byId = (id) => document.getElementById(id);
   const lang = byId("language"), code = byId("diagnostic"), seed = byId("seed");
+  const roundInput = byId("round");
   let round = 0, advisory = null;
   function option(value, label) {
     const o = document.createElement("option"); o.value = value; o.textContent = label; return o;
@@ -27,11 +28,34 @@
     };
     for (const [field, value] of Object.entries(fields)) byId(field).textContent = value;
     byId("panic-meter").style.width = Math.min(100, advisory.panic_score) + "%";
-    byId("round-counter").textContent = String(round + 1).padStart(3, "0");
+    roundInput.value = String(advisory.round);
+    roundInput.setCustomValidity("");
+    byId("round-counter").textContent = String(BigInt(advisory.round) + 1n).padStart(3, "0");
     byId("yaml-preview").textContent = engine.toYAML(advisory);
     byId("notification").textContent = "Simulated advisory " + advisory.id + " generated. All findings are fictional.";
   }
-  byId("run").addEventListener("click", function () { round += 1; show(); });
+  function readRound() {
+    const value = Number(roundInput.value);
+    if (roundInput.value.trim() === "" || !Number.isSafeInteger(value) || value < 0) {
+      roundInput.setCustomValidity("Enter a whole round from 0 to 9007199254740991.");
+      roundInput.reportValidity();
+      byId("notification").textContent = "Round invalid. The last valid advisory is unchanged.";
+      return false;
+    }
+    roundInput.setCustomValidity("");
+    round = value;
+    return true;
+  }
+  roundInput.addEventListener("input", function () { roundInput.setCustomValidity(""); });
+  roundInput.addEventListener("change", function () { if (readRound()) show(); });
+  byId("run").addEventListener("click", function () {
+    if (!readRound()) return;
+    if (round === Number.MAX_SAFE_INTEGER) {
+      byId("notification").textContent = "Maximum round reached. Choose a smaller round to continue.";
+      return;
+    }
+    round += 1; show();
+  });
   lang.addEventListener("change", function () { round = 0; show(); });
   code.addEventListener("change", function () { round = 0; show(); });
   seed.addEventListener("change", function () { round = 0; show(); });

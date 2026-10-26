@@ -1,0 +1,8 @@
+{
+  "image_prompt": "Use case: logo-brand. Asset type: wide GitHub README title masthead, 3:1 landscape. Create a polished professional title image for a satirical cybersecurity simulator. Text verbatim: \"ZERO-DAY-DREAD\". Make this the dominant clear, readable typography, industrial condensed ivory lettering with restrained amber accents, on charcoal gunmetal background. Subtle etched circuit paths, technical grid, a minimal warning-triangle emblem and sparse terminal-style detail. Premium industrial control-panel aesthetic, crisp disciplined composition, generous margins, legible at 900px wide. No people, no hooded hackers, no skulls, no rainbow RGB, no neon cyberpunk clutter, no mockup screen, no other words or tiny invented text. Tone: serious threat intelligence branding for deliberately fictional software.",
+  "method": "Built-in image generation; original PNG bytes copied without resize or edit.",
+  "original_sha256": "5e13fd1b0dd5781fac617a0b14da290083d01bf410d3f14343d309d07b255237",
+  "path": "assets/zero-day-dread.png",
+  "readme_width": 960,
+  "readme_height": "automatic"
+}
