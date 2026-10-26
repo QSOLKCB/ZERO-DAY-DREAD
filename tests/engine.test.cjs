@@ -41,4 +41,6 @@ test("fixture exists and labels everything fiction", () => {
   assert.match(content, /id: "DREAD-9999"/);
   for (const code of CODES) assert.ok(content.includes('  - "' + code + '"'));
   assert.match(content, /FICTIONAL SATIRE/);
+  const generated = toYAML(generate({language: "Human Operator", code: "PEBKAC", seed: "fixture", round: 0}));
+  assert.equal(content, generated, "Retained YAML fixture must match the deterministic engine exactly");
 });
