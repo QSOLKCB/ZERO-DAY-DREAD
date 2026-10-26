@@ -36,7 +36,8 @@
   }
   function readRound() {
     const value = Number(roundInput.value);
-    if (roundInput.value.trim() === "" || !Number.isSafeInteger(value) || value < 0) {
+    // Validate the original digits before Number can round a large fraction.
+    if (!/^\d+$/.test(roundInput.value) || !Number.isSafeInteger(value) || value < 0) {
       roundInput.setCustomValidity("Enter a whole round from 0 to 9007199254740991.");
       roundInput.reportValidity();
       byId("notification").textContent = "Round invalid. The last valid advisory is unchanged.";

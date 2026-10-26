@@ -47,6 +47,12 @@ const engine = require('../engine.js');
     assert.equal(await page.locator('#round').inputValue(),'0');
     assert.equal(await page.locator('#round').evaluate(el=>el.checkValidity()),true);
 
+    const beforeFraction = await page.locator('#yaml-preview').textContent();
+    await page.locator('#round').fill('9007199254740990.1');
+    await page.locator('#round').press('Tab');
+    assert.equal(await page.locator('#yaml-preview').textContent(),beforeFraction,'fractional round must not silently become an integer');
+    assert.equal(await page.locator('#round').evaluate(el=>el.checkValidity()),false);
+
     await page.locator('#round').fill('9007199254740991');
     await page.locator('#round').press('Tab');
     const last=await page.locator('#yaml-preview').textContent();

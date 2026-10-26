@@ -10,9 +10,19 @@ test('Pages holds main execution and gates assembly on all validation jobs',()=>
   const source=fs.readFileSync(path.join(root,'.github/workflows/pages.yml'),'utf8');
   assert.match(source,/cancel-in-progress: \$\{\{ github\.event_name == 'pull_request' \}\}/);
   assert.match(source,/needs: \[test, yaml, browser\]/);
-  assert.match(source,/current.*GITHUB_SHA/);
+  assert.match(source,/run: node scripts\/pages-freshness\.cjs/);
   assert.match(source,/if: steps\.freshness\.outputs\.fresh == 'true'/);
   assert.equal((source.match(/github\.ref == 'refs\/heads\/main' && github\.event_name != 'pull_request'/g)||[]).length,2);
+});
+
+test('actual freshness decision accepts matching main and rejects stale or unknown refs',()=>{
+  const {isFresh}=require('../scripts/pages-freshness.cjs');
+  const current='a'.repeat(40), stale='b'.repeat(40);
+  assert.equal(isFresh(current+'\trefs/heads/main\n',current),true);
+  assert.equal(isFresh(current+'\trefs/heads/main\n',stale),false);
+  assert.equal(isFresh(current+'\trefs/heads/main\r\n',current),true);
+  for(const output of ['',current+'\trefs/heads/other\n','invalid\trefs/heads/main\n',current+'\trefs/heads/main\n'+stale+'\trefs/heads/main\n'])assert.throws(()=>isFresh(output,current));
+  assert.throws(()=>isFresh(current+'\trefs/heads/main\n','unknown'));
 });
 
 test('Pages artifact contains only allowed runtime files and exact source identity',()=>{

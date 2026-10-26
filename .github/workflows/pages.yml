@@ -111,19 +111,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Confirm this run still targets the latest main commit
         id: freshness
-        shell: bash
-        run: |
-          current="$(git ls-remote origin refs/heads/main | cut -f1)"
-          if [[ ! "$current" =~ ^[0-9a-f]{40}$ ]]; then
-            echo "::error::Cannot establish current main identity"
-            exit 1
-          fi
-          if [[ "$current" == "$GITHUB_SHA" ]]; then
-            echo "fresh=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "fresh=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::Skipping superseded Pages artifact"
-          fi
+        run: node scripts/pages-freshness.cjs
       - uses: actions/deploy-pages@v4
         if: steps.freshness.outputs.fresh == 'true'
         id: deployment
