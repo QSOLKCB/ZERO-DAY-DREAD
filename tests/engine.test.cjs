@@ -3,7 +3,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
-const { generate, toYAML, LANGUAGES, CODES } = require("../engine.js");
+const { generate, toYAML, LANGUAGES, CODES, CATALOG, DIAGNOSTICS } = require("../engine.js");
 test("same inputs generate byte-identical evidence", () => {
   const opts = { language: "YAML", code: "PEBKAC", seed: "whitespace", round: 3 };
   assert.deepEqual(generate(opts), generate(opts));
@@ -32,15 +32,64 @@ test("YAML safely quotes user-supplied values", () => {
 });
 test("DREAD-9999 includes all four operator classifications", () => {
   const report = generate({ language: "Human Operator", code: "PEBKAC", seed: "fixture", round: 0 });
-  assert.equal(report.id, "DREAD-9999");
+  assert.match(report.id, /^DREAD-9999-[0-9A-F]{16}-PEBKAC$/);
   assert.equal(report.severity, "UNPATCHABLE");
   assert.deepEqual(report.related_codes, ["PEBKAC", "ID-10-T", "PICNIC", "LAYER-8"]);
 });
 test("fixture exists and labels everything fiction", () => {
   const content = fs.readFileSync(path.join(__dirname, "../advisories/dread-9999.yaml"), "utf8");
-  assert.match(content, /id: "DREAD-9999"/);
+  assert.match(content, /id: "DREAD-9999-[0-9A-F]{16}-PEBKAC"/);
   for (const code of CODES) assert.ok(content.includes('  - "' + code + '"'));
   assert.match(content, /FICTIONAL SATIRE/);
   const generated = toYAML(generate({language: "Human Operator", code: "PEBKAC", seed: "fixture", round: 0}));
-  assert.equal(content, generated, "Retained YAML fixture must match the deterministic engine exactly");
+  // Ignore host checkout newlines; compare the logical LF-normalized evidence.
+  assert.equal(content.replace(/\r\n/g, "\n"), generated, "Retained fixture must match generated YAML");
+  assert.equal(content.replace(/\r\n/g, "\n").replace(/\n/g, "\r\n").replace(/\r\n/g, "\n"), generated, "CRLF checkout must preserve fixture parity");
+});
+
+test("inherited object property names are not valid catalog languages", () => {
+  for (const language of ["constructor", "toString", "__proto__", "hasOwnProperty"]) {
+    const report = generate({ language, code: "PEBKAC" });
+    assert.equal(report.language, "PHP");
+    assert.equal(typeof report.title, "string");
+    assert.equal(typeof report.description, "string");
+  }
+});
+test("nested engine definitions and generated arrays cannot be mutated", () => {
+  const opts = { language: "PHP", code: "PEBKAC", seed: "immutable" };
+  const baseline = toYAML(generate(opts));
+  assert.ok(Object.isFrozen(CATALOG.PHP));
+  assert.ok(Object.isFrozen(DIAGNOSTICS.PEBKAC));
+  assert.throws(() => { CATALOG.PHP[0] = "modified"; }, TypeError);
+  assert.throws(() => { DIAGNOSTICS.PEBKAC[0] = "modified"; }, TypeError);
+  const report = generate({language: "Human Operator", seed: "fixture", code: "PEBKAC"});
+  const savedYAML = toYAML(report);
+  assert.ok(Object.isFrozen(report.related_codes));
+  assert.throws(() => report.related_codes.push("rogue"), TypeError);
+  assert.equal(toYAML(report), savedYAML);
+  assert.equal(toYAML(generate(opts)), baseline);
+});
+test("invalid UTF-16 seed scalars are normalized before hashing and YAML export", () => {
+  for (const seed of ["\uD800", "\uDC00", "a\uD800b", "a\uDC00b", "x".repeat(127) + "😀"]) {
+    const advisory = generate({language: "YAML", code: "PEBKAC", seed});
+    const output = toYAML(advisory);
+    assert.doesNotMatch(output, /\\u[dD][89abAB][0-9a-fA-F]{2}|\\u[dD][c-fC-F][0-9a-fA-F]{2}/);
+    const seedLine = output.split("\n").find(line => line.startsWith("seed: "));
+    assert.equal(JSON.parse(seedLine.slice(6)), advisory.seed);
+    assert.equal(toYAML(advisory), output);
+  }
+  assert.equal(generate({seed: "x".repeat(127) + "😀"}).seed, "x".repeat(127) + "\uFFFD");
+});
+test("different diagnostics change record IDs and download filenames", () => {
+  for (const language of ["PHP", "Human Operator", "YAML"]) {
+    const ids = CODES.map(code => generate({language, seed: "same", round: 3, code}).id);
+    assert.equal(new Set(ids).size, CODES.length);
+    assert.deepEqual(ids, CODES.map(code => generate({language, seed: "same", round: 3, code}).id));
+  }
+});
+test("CRLF checkout normalizes to the canonical YAML text", () => {
+  const expected = toYAML(generate({language: "Human Operator", code: "PEBKAC", seed: "fixture", round: 0}));
+  const windowsCheckout = expected.replace(/\n/g, "\r\n");
+  assert.notEqual(windowsCheckout, expected);
+  assert.equal(windowsCheckout.replace(/\r\n/g, "\n"), expected);
 });

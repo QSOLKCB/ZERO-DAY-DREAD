@@ -22,6 +22,9 @@
     "PICNIC": ["Problem In Chair, Not In Computer", "The incident has been escalated to ergonomic infrastructure."],
     "LAYER-8": ["Layer 8 (Human / Organisational)", "The OSI model has reportedly acquired another layer of management."]
   });
+  // Freezing the map alone does not freeze its publicly exported nested arrays.
+  for (const entry of Object.values(CATALOG)) Object.freeze(entry);
+  for (const entry of Object.values(DIAGNOSTICS)) Object.freeze(entry);
   const LANGUAGES = Object.freeze(Object.keys(CATALOG));
   const CODES = Object.freeze(Object.keys(DIAGNOSTICS));
   function hash(text) {
@@ -32,21 +35,55 @@
     }
     return n >>> 0;
   }
+  // Replace unpaired UTF-16 surrogates (which YAML forbids) with U+FFFD.
+  // Do this after truncation too: a valid pair may be split at the seed limit.
+  function wellFormed(value) {
+    const input = String(value);
+    let result = "";
+    for (let i = 0; i < input.length; i += 1) {
+      const current = input.charCodeAt(i);
+      if (current >= 0xD800 && current <= 0xDBFF) {
+        const next = input.charCodeAt(i + 1);
+        if (next >= 0xDC00 && next <= 0xDFFF) {
+          result += input[i] + input[++i];
+        } else {
+          result += "\uFFFD";
+        }
+      } else if (current >= 0xDC00 && current <= 0xDFFF) {
+        result += "\uFFFD";
+      } else {
+        result += input[i];
+      }
+    }
+    return result;
+  }
+  function yamlScalar(value) {
+    if (typeof value === "number" && Number.isFinite(value)) return String(value);
+    if (typeof value !== "string") throw new TypeError("Expected a finite number or string scalar");
+    return JSON.stringify(wellFormed(value));
+  }
   function generate(options) {
     const o = options || {};
-    const seed = String(o.seed == null ? "2004" : o.seed).slice(0, 128);
+    const seed = wellFormed(String(o.seed == null ? "2004" : o.seed).slice(0, 128));
     const round = Number.isSafeInteger(o.round) && o.round >= 0 ? o.round : 0;
-    const requestedLanguage = o.language === "ALL" ? "ALL" : (CATALOG[o.language] ? o.language : "PHP");
+    const requestedLanguage = o.language === "ALL" ? "ALL" : (typeof o.language === "string" && Object.prototype.hasOwnProperty.call(CATALOG, o.language) ? o.language : "PHP");
     const basis = hash(seed + "|" + requestedLanguage + "|" + round);
     const language = requestedLanguage === "ALL" ? LANGUAGES[basis % LANGUAGES.length] : requestedLanguage;
     const requestedCode = CODES.includes(o.code) ? o.code : "AUTO";
     const code = requestedCode === "AUTO" ? CODES[(basis >>> 8) % CODES.length] : requestedCode;
     const data = CATALOG[language], human = language === "Human Operator";
+    // Preserve the iconic DREAD-9999 family, but bind each record ID to
+    // language, normalized seed, round and resolved diagnostic code.
+    const inputs = [language, seed, String(round), code];
+    const identity = inputs.map((value) => value.length + ":" + value).join("|");
+    const fingerprint = (hash(identity).toString(16).padStart(8, "0") +
+      hash("dread-v2|" + identity).toString(16).padStart(8, "0")).toUpperCase();
+    const id = (human ? "DREAD-9999-" : "DREAD-") + fingerprint + "-" + code;
     return Object.freeze({
-      id: human ? "DREAD-9999" : "DREAD-" + String(1000 + (basis % 8000)).padStart(4, "0"),
+      id,
       classification: "FICTIONAL SATIRE — NOT A REAL SECURITY ADVISORY",
       language, code, code_expansion: DIAGNOSTICS[code][0],
-      related_codes: human ? CODES.slice() : [code],
+      related_codes: Object.freeze(human ? CODES.slice() : [code]),
       title: data[0], description: data[1], vector: data[2], impact: data[3],
       mitigation: data[4], diagnostic: DIAGNOSTICS[code][1],
       severity: human ? "UNPATCHABLE" : "EXISTENTIAL",
@@ -62,9 +99,9 @@
       const value = advisory[key];
       if (Array.isArray(value)) {
         lines.push(key + ":");
-        for (const item of value) lines.push("  - " + JSON.stringify(item));
+        for (const item of value) lines.push("  - " + yamlScalar(item));
       } else {
-        lines.push(key + ": " + (typeof value === "number" ? String(value) : JSON.stringify(value)));
+        lines.push(key + ": " + yamlScalar(value));
       }
     }
     return lines.join("\n") + "\n";

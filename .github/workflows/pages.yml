@@ -5,6 +5,11 @@ on:
   pull_request:
   workflow_dispatch:
 
+# One active pipeline per ref; a newer main run supersedes an older one.
+concurrency:
+  group: pages-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -29,7 +34,7 @@ jobs:
   build:
     name: Assemble static Pages site
     needs: test
-    if: github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -45,7 +50,7 @@ jobs:
 
   deploy:
     name: Deploy GitHub Pages
-    if: github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     permissions:
@@ -54,9 +59,19 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    concurrency:
-      group: pages-production
-      cancel-in-progress: false
     steps:
+      - uses: actions/checkout@v4
+      - name: Confirm this run still targets the latest main commit
+        id: freshness
+        shell: bash
+        run: |
+          current="$(git ls-remote origin refs/heads/main | cut -f1)"
+          if [[ "$current" == "$GITHUB_SHA" ]]; then
+            echo "fresh=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "fresh=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Skipping superseded Pages artifact"
+          fi
       - uses: actions/deploy-pages@v4
+        if: steps.freshness.outputs.fresh == 'true'
         id: deployment

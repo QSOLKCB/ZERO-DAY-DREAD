@@ -22,10 +22,10 @@ Node.js is only needed for tests, not for the website.
 
 ## GitHub Pages
 
-Select **GitHub Actions** as the Pages build source. The workflow in **.github/workflows/pages.yml** tests pushes and pull requests, and only publishes after a successful test job on the default branch or a manual run. A pull request does not deploy to production.
+Select **GitHub Actions** as the Pages build source. The workflow in **.github/workflows/pages.yml** tests pushes and pull requests, and only publishes after a successful test job on the default branch or a manual run. A pull request does not deploy to production. Main-branch runs cancel superseded pipelines, and a deploy-time main-HEAD check skips stale artifacts. The retained YAML fixture has LF checkout rules; parity tests also normalize CRLF.
 
 ## Advisory contract
 
-All IDs are project-local **DREAD-XXXX**, never real CVEs. The static example **advisories/dread-9999.yaml** captures **Human Operator Still Required**, including PEBKAC / ID-10-T / PICNIC / LAYER-8.
+Generated record IDs use project-local **DREAD-<fingerprint>-<diagnostic>** syntax. The Human Operator family uses **DREAD-9999-<fingerprint>-<diagnostic>**; the full ID binds the language, normalized seed, round, and code. Fingerprints are deterministic but not cryptographic uniqueness guarantees. The static example **advisories/dread-9999.yaml** captures **Human Operator Still Required**, including PEBKAC / ID-10-T / PICNIC / LAYER-8.
 
 Outputs are fiction. They are neither actual findings nor security guidance.
