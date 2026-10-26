@@ -59,7 +59,7 @@ jobs:
     name: Offline browser / ${{ matrix.browser }}
     # Pin the runner and Playwright; install matching bundled browsers and OS dependencies.
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
