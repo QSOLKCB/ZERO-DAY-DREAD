@@ -1,8 +1,10 @@
 <a id="zero-day-dread"></a>
 <p align="center">
-  <img src="assets/zero-day-dread.png"
-       alt="ZERO-DAY-DREAD — Industrial cybersecurity warning banner"
-       width="960">
+  <a href="https://qsolkcb.github.io/ZERO-DAY-DREAD/">
+    <img src="assets/zero-day-dread.png"
+         alt="ZERO-DAY-DREAD — Industrial cybersecurity warning banner"
+         width="960">
+  </a>
 </p>
 
 <p align="center">
