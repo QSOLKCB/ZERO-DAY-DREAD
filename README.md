@@ -4,7 +4,7 @@
 
 *An entirely unnecessary, deeply sarcastic AI vulnerability intelligence simulator.*
 
-**Status:** Concept / Pre-Alpha  
+**Status:** v0.1.0 candidate / Static Preview  
 **Classification:** Existential Software Insecurity  
 **Threat Level:** Yes  
 **Exploitability:** Emotionally devastating  
@@ -43,8 +43,27 @@ Naturally, we respond by building another dashboard.
 | HTML | Critical `<div>` containment failure |
 | CSS | Researchers achieve arbitrary layout execution |
 | Bash | Shellshock develops a sequel nobody requested |
+| YAML | One space reclassifies production as a list item |
+| Human Operator | Unpatchable PEBKAC / ID-10-T / PICNIC / Layer 8 dependency |
 
 All findings are fictional. Unfortunately, some of the programming languages are real.
+
+## Try the simulator
+
+Open `index.html` in a browser, or use the GitHub Pages site after the first merge. No build tools, network, accounts, telemetry, or AI API are required.
+
+Choose a programming language (including **YAML**), a diagnostic code (**PEBKAC**, **ID-10-T**, **PICNIC**, **LAYER-8**), and an optional reproducibility seed. Generate fictional advisories, copy their YAML, or download a YAML evidence packet. Select **Human Operator** to trigger the canonical **DREAD-9999** finding, with all four human-error codes.
+
+Automated regression tests: `node --test tests/*.test.cjs`. See [Getting Started](docs/GETTING_STARTED.md) and [canonical DREAD-9999 YAML](advisories/dread-9999.yaml).
+
+## Implemented v0.1.0 candidate
+
+- Responsive retro-industrial single-page dashboard
+- Seeded, deterministic fictional advisory engine and RCE Roulette
+- Fictional AI Panic Index and remediation assistant
+- Fictional diagnostic codes, including PEBKAC, ID-10-T, PICNIC, and Layer 8
+- YAML 1.2-compatible advisory exports and canonical fixture
+- Node built-in regression tests and GitHub Actions Pages deployment
 
 ## Planned Features
 
@@ -145,15 +164,15 @@ All simulated advisories will use project-specific identifiers rather than real 
 
 ## Roadmap
 
-- [ ] Establish immutable project baseline
-- [ ] Build retro-inspired security dashboard
-- [ ] Implement deterministic advisory generator
-- [ ] Add programming-language selection
-- [ ] Implement RCE Roulette
-- [ ] Develop fictional AI Panic Index
-- [ ] Add absurd remediation assistant
-- [ ] Create reproducibility and regression tests
-- [ ] Support offline operation
+- [ ] Establish immutable project baseline after reviewed release
+- [x] Build retro-inspired security dashboard
+- [x] Implement deterministic advisory generator
+- [x] Add programming-language selection
+- [x] Implement RCE Roulette
+- [x] Develop fictional AI Panic Index
+- [x] Add absurd remediation assistant
+- [x] Create reproducibility and regression tests
+- [x] Support offline operation
 - [ ] Publish static website through GitHub Pages
 - [ ] Release v0.1.0
 
@@ -188,6 +207,8 @@ For genuine vulnerability information, consult recognised security advisories, v
 ## The Final Advisory
 
 **DREAD-9999: Human Operator Still Required**
+
+Diagnostic classes: **PEBKAC**, **ID-10-T**, **PICNIC**, **LAYER-8**
 
 Severity: UNPATCHABLE  
 Affected Versions: All  

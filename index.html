@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#10151a">
+  <meta name="description" content="ZERO-DAY-DREAD: an offline, deterministic, completely fictional vulnerability panic simulator.">
+  <title>ZERO-DAY-DREAD // Fictional Vulnerability Intelligence</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="engine.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="masthead">
+    <div class="shell masthead-inner"><a class="brand" href="./" aria-label="ZERO-DAY-DREAD home"><span class="brand-mark" aria-hidden="true">[ ! ]</span> ZERO-DAY-DREAD<span class="cursor" aria-hidden="true">_</span></a>
+      <span class="version">QSOL-IMC / THREAT THEATRE / v0.1.0-pre</span></div>
+  </header>
+  <main id="main" class="shell">
+    <div class="ticker" aria-label="Satire warning"><span class="pulse" aria-hidden="true"></span><strong>FICTIONAL THREAT FEED</strong><span>NO REAL CVEs</span><span>NO SCANNING</span><span>NO EXPLOITS</span><span>MAXIMUM CONSULTANT ANXIETY</span></div>
+    <section class="hero" aria-labelledby="heading"><div class="eyebrow">DIVISION OF SYNTHETIC DISASTER / EST. 2004</div>
+      <h1 id="heading">THE FUTURE IS <em>VULNERABLE.</em><br>SO IS THE PAST.</h1>
+      <p class="lede">Your code was secure yesterday. Then AI learned to read it.</p>
+      <p class="sublede">Manufacturing imaginary critical incidents since approximately five minutes ago. Entirely fictional, deterministic and delightfully unnecessary.</p>
+    </section>
+    <div class="dashboard">
+      <section class="panel control-panel" aria-labelledby="controls-heading">
+        <div class="panel-heading"><span class="kicker">01 // CONFIGURATION</span><h2 id="controls-heading">PANIC CONSOLE</h2></div>
+        <label for="language">Affected language / system</label>
+        <select id="language" name="language" aria-label="Affected language"><option>Loading simulator...</option></select>
+        <label for="diagnostic">Diagnostic classification</label>
+        <select id="diagnostic" name="diagnostic"><option>Loading diagnostic codes...</option></select>
+        <label for="seed">Reproducibility seed</label>
+        <input id="seed" name="seed" type="text" value="2004" maxlength="128" spellcheck="false" autocomplete="off" aria-describedby="seed-help">
+        <p id="seed-help" class="small">Same language + diagnostic + seed + round = identical results. No network required.</p>
+        <button id="run" class="primary" type="button">[ ! ] DISCOVER ANOTHER DISASTER</button>
+        <p class="small">Advisory sequence <strong id="round-counter">001</strong>. No real vulnerability checks occur.</p>
+        <div class="separator"></div>
+        <h3>OPERATOR ERROR TAXONOMY</h3>
+        <dl class="taxonomy">
+          <dt>PEBKAC</dt><dd>Problem Exists Between Keyboard And Chair</dd>
+          <dt>ID-10-T</dt><dd>Classic helpdesk classification</dd>
+          <dt>PICNIC</dt><dd>Problem In Chair, Not In Computer</dd>
+          <dt>LAYER-8</dt><dd>Human and organisational layer</dd>
+        </dl>
+      </section>
+      <section class="panel advisory-panel" aria-labelledby="advisory-title">
+        <div class="panel-heading advisory-top"><span class="kicker">02 // SYNTHETIC SECURITY BULLETIN</span><span class="fake-label">SIMULATION ONLY</span></div>
+        <div class="issue-line"><span id="advisory-id">DREAD-9999</span><span class="severity" id="advisory-severity">UNPATCHABLE</span></div>
+        <h2 id="advisory-title">Human Operator Still Required</h2>
+        <p class="description" id="advisory-description">Researchers have identified a persistent architectural dependency between computers and the humans operating them.</p>
+        <div class="facts">
+          <div><span>DETECTED IN</span><strong id="advisory-language">Human Operator</strong></div>
+          <div><span>ATTACK VECTOR</span><strong id="advisory-vector">Biological Interface</strong></div>
+          <div><span>CLASSIFICATION</span><strong id="advisory-classification">PEBKAC</strong></div>
+        </div>
+        <div class="advisory-body">
+          <h3>SIMULATED IMPACT</h3><p id="advisory-impact">Unpredictable behaviour and Friday deployments.</p>
+          <h3>RECOMMENDED REMEDIATION</h3><p id="advisory-mitigation">No patch available.</p>
+          <h3>DIAGNOSTIC COMMENTARY</h3><p id="advisory-diagnostic">The human-machine interface remains a legacy component.</p>
+          <p class="small"><strong>Related classifications:</strong> <span id="related-codes">PEBKAC / ID-10-T / PICNIC / LAYER-8</span></p>
+        </div>
+        <div class="meter-header"><span>AI PANIC INDEX™ (FAKE)</span><strong id="panic-score">999/100</strong></div>
+        <div class="meter" role="presentation"><div id="panic-meter"></div></div>
+        <p class="revenue">Projected consultant revenue: <strong id="consultant-revenue">$999,999,999 (imaginary)</strong></p>
+      </section>
+    </div>
+    <section class="panel yaml-panel" aria-labelledby="yaml-heading">
+      <div class="panel-heading"><div><span class="kicker">03 // MACHINE-READABLE NONSENSE</span><h2 id="yaml-heading">YAML EVIDENCE PACKET</h2></div><div class="actions"><button id="copy" type="button">COPY YAML</button><button id="download" type="button">DOWNLOAD .YAML</button></div></div>
+      <p class="small">Reproducible fictional advisory records. YAML 1.2 compatible, no YAML parser or external packages needed.</p>
+      <pre id="yaml-preview" tabindex="0" aria-label="Generated fictional YAML advisory"># Enable JavaScript to generate a fictional advisory.</pre>
+    </section>
+    <section class="closing" aria-label="About this satire"><p><strong>DREAD-9999</strong> — Human Operator Still Required. Severity: UNPATCHABLE. Vendor response: <em>“Works on my machine.”</em></p><p>Not an actual scanner, security product or source of real advisories. Any resemblance to real incidents is the industry's problem.</p></section>
+  </main>
+  <footer class="shell footer"><span>© QSOL-IMC · ZERO-DAY-DREAD · APACHE-2.0</span><a href="https://github.com/QSOLKCB/ZERO-DAY-DREAD">SOURCE / AUDIT THE NONSENSE</a></footer>
+  <div id="notification" class="sr-only" role="status" aria-live="polite"></div>
+</body>
+</html>

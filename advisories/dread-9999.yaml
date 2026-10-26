@@ -1,0 +1,24 @@
+# ZERO-DAY-DREAD — FICTIONAL SATIRE — NEVER USE FOR SECURITY DECISIONS
+---
+id: "DREAD-9999-2E9607C0B681DC5B-PEBKAC"
+classification: "FICTIONAL SATIRE — NOT A REAL SECURITY ADVISORY"
+language: "Human Operator"
+requested_language: "Human Operator"
+code: "PEBKAC"
+code_expansion: "Problem Exists Between Keyboard And Chair"
+related_codes:
+  - "PEBKAC"
+  - "ID-10-T"
+  - "PICNIC"
+  - "LAYER-8"
+title: "Human Operator Still Required"
+description: "Researchers have identified a persistent architectural dependency between computers and the humans operating them."
+vector: "Biological Interface"
+impact: "Unpredictable behaviour, undocumented decisions and Friday deployments."
+mitigation: "No patch available. Provide coffee, documentation and a second set of eyes."
+diagnostic: "The human-machine interface remains a legacy component."
+severity: "UNPATCHABLE"
+panic_score: 999
+consultant_revenue: "$123,000 (imaginary)"
+seed: "fixture"
+round: 0

@@ -1,0 +1,77 @@
+name: Test and publish satire site
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# One active pipeline per ref; a newer main run supersedes an older one.
+concurrency:
+  group: pages-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Deterministic engine tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test pure JS engine
+        run: node --test tests/*.test.cjs
+      - name: Syntax check
+        run: |
+          node --check engine.js
+          node --check app.js
+      - name: Assert required static files
+        run: test -s index.html && test -s styles.css && test -s advisories/dread-9999.yaml
+
+  build:
+    name: Assemble static Pages site
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build static site (no packages)
+        run: |
+          mkdir -p _site/advisories
+          cp index.html styles.css engine.js app.js _site/
+          cp advisories/dread-9999.yaml _site/advisories/
+          touch _site/.nojekyll
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy GitHub Pages
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm this run still targets the latest main commit
+        id: freshness
+        shell: bash
+        run: |
+          current="$(git ls-remote origin refs/heads/main | cut -f1)"
+          if [[ "$current" == "$GITHUB_SHA" ]]; then
+            echo "fresh=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "fresh=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Skipping superseded Pages artifact"
+          fi
+      - uses: actions/deploy-pages@v4
+        if: steps.freshness.outputs.fresh == 'true'
+        id: deployment
